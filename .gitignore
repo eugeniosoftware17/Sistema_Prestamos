@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Variables de entorno / secretos
+.env
+
+# Editores / SO
+.vscode/
+.idea/
+.DS_Store
