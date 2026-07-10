@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}eemoneey{% endblock %} | Cloud Tech System</title>
+    <title>{% block title %}{{ config_sitio.nombre }}{% endblock %} | Cloud Tech System</title>
+    {% if config_sitio.icono %}<link rel="icon" href="{{ config_sitio.icono.url }}">{% endif %}
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block extra_css %}{% endblock %}
@@ -18,7 +19,10 @@
             <span></span>
             <span></span>
         </button>
-        <div class="topbar-brand">eemoneey</div>
+        <div class="topbar-brand">
+            {% if config_sitio.icono %}<img src="{{ config_sitio.icono.url }}" alt="" class="brand-icon">{% endif %}
+            {{ config_sitio.nombre }}
+        </div>
     </div>
 
     <div class="nav-overlay" id="nav-overlay"></div>

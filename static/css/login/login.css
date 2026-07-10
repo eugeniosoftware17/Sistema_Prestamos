@@ -68,6 +68,13 @@ body {
     height: 42px;
 }
 
+.brand-logo-img {
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
 .login-card-title {
     font-family: 'Outfit', sans-serif;
     font-size: 1.8rem;

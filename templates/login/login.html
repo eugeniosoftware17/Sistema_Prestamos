@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Acceso Corporativo eemoney - Cloud Tech System.">
-    <title>eemoneey | Acceso Corporativo</title>
+    <meta name="description" content="Acceso Corporativo {{ config_sitio.nombre }} - Cloud Tech System.">
+    <title>{{ config_sitio.nombre }} | Acceso Corporativo</title>
+    {% if config_sitio.icono %}<link rel="icon" href="{{ config_sitio.icono.url }}">{% endif %}
     <!-- Google Fonts: Plus Jakarta Sans for UI and Outfit for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,17 +24,21 @@
 
     <!-- Cabecera de la marca Cloud Tech System -->
     <header class="login-card-header">
-        <!-- Logo de la empresa (Nube SVG Premium) -->
+        <!-- Logo de la empresa -->
         <div class="logo-container-cloud">
-            <svg viewBox="0 0 100 100" class="brand-logo-svg">
-                <!-- Cuerpo de la nube -->
-                <path d="M 25 65 A 15 15 0 0 1 30 38 A 22 22 0 0 1 70 36 A 15 15 0 0 1 75 65 Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" />
-                <!-- Flecha de crecimiento financiero -->
-                <path d="M 40 52 L 48 44 L 54 50 L 62 40 M 56 40 H 62 V 46" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            {% if config_sitio.icono %}
+                <img src="{{ config_sitio.icono.url }}" alt="{{ config_sitio.nombre }}" class="brand-logo-img">
+            {% else %}
+                <svg viewBox="0 0 100 100" class="brand-logo-svg">
+                    <!-- Cuerpo de la nube -->
+                    <path d="M 25 65 A 15 15 0 0 1 30 38 A 22 22 0 0 1 70 36 A 15 15 0 0 1 75 65 Z" fill="none" stroke="currentColor" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" />
+                    <!-- Flecha de crecimiento financiero -->
+                    <path d="M 40 52 L 48 44 L 54 50 L 62 40 M 56 40 H 62 V 46" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            {% endif %}
         </div>
-        
-        <h1 class="login-card-title">eemoneey</h1>
+
+        <h1 class="login-card-title">{{ config_sitio.nombre }}</h1>
         <p class="login-card-subtitle">Cloud Tech System &bull; Acceso Corporativo</p>
     </header>
 

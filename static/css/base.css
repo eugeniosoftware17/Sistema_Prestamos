@@ -46,10 +46,20 @@ body {
 }
 
 .topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.3rem;
     color: var(--primary);
+}
+
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    object-fit: cover;
 }
 
 /* Botón hamburguesa */
