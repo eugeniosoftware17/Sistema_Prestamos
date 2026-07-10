@@ -47,8 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps propias del sistema de préstamos
     'core',
+    'usuarios',
     'clientes',
     'prestamos',
+    'pagos',
+    'reportes',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +69,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,3 +131,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Autenticación
+LOGIN_URL = 'usuarios:login'
+LOGIN_REDIRECT_URL = '/admin/'  # Placeholder hasta que exista un dashboard propio
