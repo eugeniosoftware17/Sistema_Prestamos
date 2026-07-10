@@ -5,5 +5,8 @@ from . import views
 app_name = 'prestamos'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.PrestamoListView.as_view(), name='index'),
+    path('nuevo/', views.PrestamoCreateView.as_view(), name='crear'),
+    path('<int:pk>/editar/', views.PrestamoUpdateView.as_view(), name='editar'),
+    path('<int:pk>/eliminar/', views.PrestamoDeleteView.as_view(), name='eliminar'),
 ]

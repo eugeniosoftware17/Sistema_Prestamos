@@ -3,6 +3,55 @@
 {% block title %}Préstamos{% endblock %}
 
 {% block content %}
-<h1>Préstamos</h1>
-<p>Próximamente.</p>
+<div class="page-header">
+    <h1>Préstamos</h1>
+    <a href="{% url 'prestamos:crear' %}" class="btn-primary">+ Nuevo préstamo</a>
+</div>
+
+{% if prestamos %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Monto</th>
+            <th>Tasa</th>
+            <th>Plazo</th>
+            <th>Inicio</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prestamo in prestamos %}
+        <tr>
+            <td>{{ prestamo.cliente }}</td>
+            <td>{{ prestamo.monto }}</td>
+            <td>{{ prestamo.tasa_interes }}%</td>
+            <td>{{ prestamo.plazo_meses }} meses</td>
+            <td>{{ prestamo.fecha_inicio }}</td>
+            <td>{{ prestamo.get_estado_display }}</td>
+            <td class="table-actions">
+                <a href="{% url 'prestamos:editar' prestamo.pk %}">Editar</a>
+                <a href="{% url 'prestamos:eliminar' prestamo.pk %}" class="link-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Anterior</a>
+    {% endif %}
+    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Siguiente &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<p>No hay préstamos registrados todavía.</p>
+{% endif %}
 {% endblock %}
