@@ -4,5 +4,24 @@
 
 {% block content %}
 <h1>Bienvenido, {{ user.get_username }}</h1>
-<p>Has iniciado sesión correctamente en Cloud Tech System.</p>
+<p>Resumen general del sistema.</p>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ total_clientes }}</span>
+        <span class="stat-label">Clientes registrados</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ prestamos_activos }}</span>
+        <span class="stat-label">Préstamos activos</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ cartera_activa }}</span>
+        <span class="stat-label">Cartera activa</span>
+    </div>
+    <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
+        <span class="stat-value">{{ cuotas_vencidas }}</span>
+        <span class="stat-label">Cuotas vencidas</span>
+    </div>
+</div>
 {% endblock %}

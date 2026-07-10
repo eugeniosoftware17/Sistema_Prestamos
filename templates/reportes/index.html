@@ -4,5 +4,37 @@
 
 {% block content %}
 <h1>Reportes</h1>
-<p>Próximamente.</p>
+
+<div class="stats-grid">
+    <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
+        <span class="stat-value">{{ cuotas_vencidas }}</span>
+        <span class="stat-label">Cuotas vencidas</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ pagos_del_mes }}</span>
+        <span class="stat-label">Cobrado este mes</span>
+    </div>
+</div>
+
+<h2 class="section-title" style="margin-top: 2rem;">Préstamos por estado</h2>
+<div class="table-responsive">
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Cantidad</th>
+            <th>Monto total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for fila in prestamos_por_estado %}
+        <tr>
+            <td>{{ fila.estado }}</td>
+            <td>{{ fila.cantidad }}</td>
+            <td>{{ fila.monto }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
 {% endblock %}

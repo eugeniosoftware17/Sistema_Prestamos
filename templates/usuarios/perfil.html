@@ -4,5 +4,13 @@
 
 {% block content %}
 <h1>Perfil</h1>
-<p>Próximamente.</p>
+
+<div class="detail-card">
+    <div><span class="detail-label">Usuario</span>{{ user.get_username }}</div>
+    <div><span class="detail-label">Email</span>{{ user.email|default:"—" }}</div>
+    <div><span class="detail-label">Rol</span>{{ user.perfil.get_rol_display|default:"—" }}</div>
+    <div><span class="detail-label">Teléfono</span>{{ user.perfil.telefono|default:"—" }}</div>
+</div>
+
+<a href="{% url 'usuarios:password_change' %}" class="btn-secondary">Cambiar contraseña</a>
 {% endblock %}

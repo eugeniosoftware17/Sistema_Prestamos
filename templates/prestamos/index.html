@@ -8,6 +8,17 @@
     <a href="{% url 'prestamos:crear' %}" class="btn-primary">+ Nuevo préstamo</a>
 </div>
 
+<form method="get" class="search-form">
+    <input type="text" name="q" value="{{ query }}" placeholder="Buscar por cliente...">
+    <select name="estado">
+        <option value="">Todos los estados</option>
+        {% for valor, etiqueta in estados %}
+            <option value="{{ valor }}" {% if valor == estado %}selected{% endif %}>{{ etiqueta }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn-secondary">Filtrar</button>
+</form>
+
 {% if prestamos %}
 <div class="table-responsive">
 <table class="data-table">
@@ -25,7 +36,7 @@
     <tbody>
         {% for prestamo in prestamos %}
         <tr>
-            <td>{{ prestamo.cliente }}</td>
+            <td><a href="{% url 'prestamos:detalle' prestamo.pk %}">{{ prestamo.cliente }}</a></td>
             <td>{{ prestamo.monto }}</td>
             <td>{{ prestamo.tasa_interes }}%</td>
             <td>{{ prestamo.plazo_meses }} meses</td>

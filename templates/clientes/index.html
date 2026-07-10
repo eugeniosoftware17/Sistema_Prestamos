@@ -8,6 +8,11 @@
     <a href="{% url 'clientes:crear' %}" class="btn-primary">+ Nuevo cliente</a>
 </div>
 
+<form method="get" class="search-form">
+    <input type="text" name="q" value="{{ query }}" placeholder="Buscar por nombre o cédula...">
+    <button type="submit" class="btn-secondary">Buscar</button>
+</form>
+
 {% if clientes %}
 <div class="table-responsive">
 <table class="data-table">
@@ -23,7 +28,7 @@
     <tbody>
         {% for cliente in clientes %}
         <tr>
-            <td>{{ cliente.nombre_completo }}</td>
+            <td><a href="{% url 'clientes:detalle' cliente.pk %}">{{ cliente.nombre_completo }}</a></td>
             <td>{{ cliente.cedula }}</td>
             <td>{{ cliente.telefono|default:"—" }}</td>
             <td>{{ cliente.email|default:"—" }}</td>

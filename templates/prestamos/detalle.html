@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Préstamo de {{ prestamo.cliente }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Préstamo de {{ prestamo.cliente }}</h1>
+    <a href="{% url 'prestamos:editar' prestamo.pk %}" class="btn-secondary">Editar</a>
+</div>
+
+<div class="detail-card">
+    <div><span class="detail-label">Cliente</span><a href="{% url 'clientes:detalle' prestamo.cliente.pk %}">{{ prestamo.cliente }}</a></div>
+    <div><span class="detail-label">Monto</span>{{ prestamo.monto }}</div>
+    <div><span class="detail-label">Tasa</span>{{ prestamo.tasa_interes }}%</div>
+    <div><span class="detail-label">Plazo</span>{{ prestamo.plazo_meses }} meses</div>
+    <div><span class="detail-label">Inicio</span>{{ prestamo.fecha_inicio }}</div>
+    <div><span class="detail-label">Estado</span>{{ prestamo.get_estado_display }}</div>
+</div>
+
+<h2 class="section-title">Cuotas</h2>
+{% if prestamo.cuotas.all %}
+<div class="table-responsive">
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>N°</th>
+            <th>Monto</th>
+            <th>Vencimiento</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cuota in prestamo.cuotas.all %}
+        <tr>
+            <td>{{ cuota.numero }}</td>
+            <td>{{ cuota.monto }}</td>
+            <td>{{ cuota.fecha_vencimiento }}</td>
+            <td>{{ cuota.get_estado_display }}</td>
+            <td class="table-actions">
+                {% if cuota.estado != 'pagada' %}
+                    <a href="{% url 'pagos:registrar_pago' cuota.pk %}">Registrar pago</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Este préstamo no tiene cuotas registradas.</p>
+{% endif %}
+{% endblock %}

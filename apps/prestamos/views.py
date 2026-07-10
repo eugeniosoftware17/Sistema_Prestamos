@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.db.models.deletion import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from pagos.services import generar_cuotas
 
@@ -16,6 +17,29 @@ class PrestamoListView(ListView):
     context_object_name = 'prestamos'
     ordering = ['-fecha_inicio']
     paginate_by = 20
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        estado = self.request.GET.get('estado')
+        if query:
+            queryset = queryset.filter(cliente__nombre_completo__icontains=query)
+        if estado:
+            queryset = queryset.filter(estado=estado)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        context['estado'] = self.request.GET.get('estado', '')
+        context['estados'] = Prestamo.Estado.choices
+        return context
+
+
+class PrestamoDetailView(DetailView):
+    model = Prestamo
+    template_name = 'prestamos/detalle.html'
+    context_object_name = 'prestamo'
 
 
 class PrestamoCreateView(CreateView):

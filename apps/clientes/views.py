@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.db.models import Q
 from django.db.models.deletion import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .forms import ClienteForm
 from .models import Cliente
@@ -14,6 +15,26 @@ class ClienteListView(ListView):
     context_object_name = 'clientes'
     ordering = ['nombre_completo']
     paginate_by = 20
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(nombre_completo__icontains=query) | Q(cedula__icontains=query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
+
+
+class ClienteDetailView(DetailView):
+    model = Cliente
+    template_name = 'clientes/detalle.html'
+    context_object_name = 'cliente'
 
 
 class ClienteCreateView(CreateView):
