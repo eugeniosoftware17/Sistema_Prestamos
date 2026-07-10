@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Editar cliente{% else %}Nuevo cliente{% endif %}{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Editar cliente{% else %}Nuevo cliente{% endif %}</h1>
+
+<form method="post" class="data-form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+            <span class="error-message">{{ field.errors.0 }}</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">Guardar</button>
+        <a href="{% url 'clientes:index' %}" class="btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

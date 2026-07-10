@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def perfil(request):
+    return render(request, 'usuarios/perfil.html')
+
+
+def configuracion(request):
+    return render(request, 'usuarios/configuracion.html')

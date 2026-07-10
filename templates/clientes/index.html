@@ -3,6 +3,51 @@
 {% block title %}Clientes{% endblock %}
 
 {% block content %}
-<h1>Clientes</h1>
-<p>Próximamente.</p>
+<div class="page-header">
+    <h1>Clientes</h1>
+    <a href="{% url 'clientes:crear' %}" class="btn-primary">+ Nuevo cliente</a>
+</div>
+
+{% if clientes %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cliente in clientes %}
+        <tr>
+            <td>{{ cliente.nombre_completo }}</td>
+            <td>{{ cliente.cedula }}</td>
+            <td>{{ cliente.telefono|default:"—" }}</td>
+            <td>{{ cliente.email|default:"—" }}</td>
+            <td class="table-actions">
+                <a href="{% url 'clientes:editar' cliente.pk %}">Editar</a>
+                <a href="{% url 'clientes:eliminar' cliente.pk %}" class="link-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Anterior</a>
+    {% endif %}
+    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Siguiente &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<p>No hay clientes registrados todavía.</p>
+{% endif %}
 {% endblock %}
