@@ -86,11 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
             passwordInput.closest('.input-group').classList.add('has-error');
             passwordError.textContent = 'La contraseña es obligatoria.';
             isValid = false;
-        } else if (password.length < 6) {
-            e.preventDefault();
-            passwordInput.closest('.input-group').classList.add('has-error');
-            passwordError.textContent = 'La contraseña debe tener al menos 6 caracteres.';
-            isValid = false;
         }
 
         if (!isValid) return;
