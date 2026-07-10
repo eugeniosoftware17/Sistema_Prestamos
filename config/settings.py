@@ -137,4 +137,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Autenticación
 LOGIN_URL = 'usuarios:login'
-LOGIN_REDIRECT_URL = '/admin/'  # Placeholder hasta que exista un dashboard propio
+LOGIN_REDIRECT_URL = 'core:home'
