@@ -14,13 +14,16 @@ def index(request):
     for valor, etiqueta in Prestamo.Estado.choices:
         queryset = Prestamo.objects.filter(estado=valor)
         prestamos_por_estado.append({
+            'valor': valor,
             'estado': etiqueta,
             'cantidad': queryset.count(),
             'monto': queryset.aggregate(total=Sum('monto'))['total'] or 0,
         })
+    max_cantidad = max((fila['cantidad'] for fila in prestamos_por_estado), default=0) or 1
 
     context = {
         'prestamos_por_estado': prestamos_por_estado,
+        'max_cantidad': max_cantidad,
         'cuotas_vencidas': Cuota.objects.filter(
             estado=Cuota.Estado.PENDIENTE, fecha_vencimiento__lt=hoy
         ).count(),

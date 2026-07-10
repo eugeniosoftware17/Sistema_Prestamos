@@ -4,5 +4,36 @@
 
 {% block content %}
 <h1>Ayuda / Soporte</h1>
-<p>Próximamente.</p>
+
+<div class="faq-list">
+    <details class="faq-item">
+        <summary>¿Cómo registro un cliente nuevo?</summary>
+        <p>Ve a <strong>Clientes</strong> → <strong>+ Nuevo cliente</strong>, completa nombre, cédula y datos de contacto, y guarda.</p>
+    </details>
+
+    <details class="faq-item">
+        <summary>¿Cómo creo un préstamo?</summary>
+        <p>Ve a <strong>Préstamos</strong> → <strong>+ Nuevo préstamo</strong>, elige el cliente, monto, tasa, plazo en meses y fecha de inicio. Al guardar, el sistema genera automáticamente las cuotas mensuales.</p>
+    </details>
+
+    <details class="faq-item">
+        <summary>¿Cómo registro un pago?</summary>
+        <p>Ve a <strong>Pagos</strong>, busca la cuota correspondiente y haz clic en <strong>Registrar pago</strong>. Si el monto pagado cubre el total de la cuota, esta pasa automáticamente a "Pagada".</p>
+    </details>
+
+    <details class="faq-item">
+        <summary>¿Qué pasa si edito un préstamo que ya tiene pagos?</summary>
+        <p>Si el préstamo no tiene pagos registrados, editar el monto o el plazo regenera las cuotas automáticamente. Si ya tiene pagos, las cuotas existentes no se tocan, para no perder ese historial.</p>
+    </details>
+
+    <details class="faq-item">
+        <summary>¿Cómo cambio mi contraseña?</summary>
+        <p>Ve a <strong>Perfil</strong> → <strong>Cambiar contraseña</strong>.</p>
+    </details>
+
+    <details class="faq-item">
+        <summary>¿Quién puede ver Reportes y Configuración?</summary>
+        <p>Solo las cuentas con rol <strong>Administrador</strong>. El rol <strong>Cobrador</strong> tiene acceso a Clientes, Préstamos y Pagos.</p>
+    </details>
+</div>
 {% endblock %}

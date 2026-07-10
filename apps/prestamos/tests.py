@@ -56,3 +56,29 @@ class PrestamoCrudTests(TestCase):
         self.assertEqual(Prestamo.objects.count(), 1)
         mensajes = [str(m) for m in response.context['messages']]
         self.assertTrue(any('no se puede eliminar' in m.lower() for m in mensajes))
+
+    def test_editar_prestamo_sin_pagos_regenera_cuotas(self):
+        self.client.post(reverse('prestamos:crear'), self.datos)
+        prestamo = Prestamo.objects.get()
+
+        datos_editados = {**self.datos, 'monto': '6000.00', 'plazo_meses': '2'}
+        response = self.client.post(reverse('prestamos:editar', args=[prestamo.pk]), datos_editados)
+        self.assertRedirects(response, reverse('prestamos:index'))
+
+        cuotas = list(prestamo.cuotas.order_by('numero'))
+        self.assertEqual(len(cuotas), 2)
+        self.assertEqual(sum(c.monto for c in cuotas), Decimal('6000.00'))
+
+    def test_editar_prestamo_con_pagos_no_toca_cuotas(self):
+        self.client.post(reverse('prestamos:crear'), self.datos)
+        prestamo = Prestamo.objects.get()
+        cuota = prestamo.cuotas.first()
+        cuota.pagos.create(monto_pagado=cuota.monto, fecha_pago='2026-02-10')
+
+        datos_editados = {**self.datos, 'monto': '6000.00', 'plazo_meses': '2'}
+        response = self.client.post(
+            reverse('prestamos:editar', args=[prestamo.pk]), datos_editados, follow=True
+        )
+        self.assertEqual(prestamo.cuotas.count(), 3)
+        mensajes = [str(m) for m in response.context['messages']]
+        self.assertTrue(any('no se regeneraron' in m.lower() for m in mensajes))

@@ -17,7 +17,19 @@
 </div>
 
 <h2 class="section-title" style="margin-top: 2rem;">Préstamos por estado</h2>
-<div class="table-responsive">
+<div class="bar-chart">
+    {% for fila in prestamos_por_estado %}
+    <div class="bar-row">
+        <span class="bar-label">{{ fila.estado }}</span>
+        <div class="bar-track">
+            <div class="bar-fill bar-{{ fila.valor }}" style="width: {% widthratio fila.cantidad max_cantidad 100 %}%;"></div>
+        </div>
+        <span class="bar-value">{{ fila.cantidad }} &middot; {{ fila.monto }}</span>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="table-responsive" style="margin-top: 1.5rem;">
 <table class="data-table">
     <thead>
         <tr>

@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
+from pagos.models import Pago
 from pagos.services import generar_cuotas
 
 from .forms import PrestamoForm
@@ -62,8 +63,18 @@ class PrestamoUpdateView(UpdateView):
     success_url = reverse_lazy('prestamos:index')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Préstamo actualizado correctamente.')
-        return super().form_valid(form)
+        tiene_pagos = Pago.objects.filter(cuota__prestamo=self.object).exists()
+        response = super().form_valid(form)
+        if tiene_pagos:
+            messages.warning(
+                self.request,
+                'Préstamo actualizado. Las cuotas no se regeneraron porque ya tienen pagos registrados.',
+            )
+        else:
+            self.object.cuotas.all().delete()
+            generar_cuotas(self.object)
+            messages.success(self.request, 'Préstamo actualizado correctamente. Las cuotas se regeneraron.')
+        return response
 
 
 class PrestamoDeleteView(DeleteView):
