@@ -10,12 +10,11 @@ class Perfil(TimeStampedModel):
     class Rol(models.TextChoices):
         ADMIN = 'admin', 'Administrador'
         COBRADOR = 'cobrador', 'Cobrador'
-        CLIENTE = 'cliente', 'Cliente'
 
     usuario = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='perfil'
     )
-    rol = models.CharField(max_length=20, choices=Rol.choices, default=Rol.CLIENTE)
+    rol = models.CharField(max_length=20, choices=Rol.choices, default=Rol.COBRADOR)
     telefono = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
@@ -25,5 +24,5 @@ class Perfil(TimeStampedModel):
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def crear_perfil(sender, instance, created, **kwargs):
     if created:
-        rol = Perfil.Rol.ADMIN if instance.is_superuser else Perfil.Rol.CLIENTE
+        rol = Perfil.Rol.ADMIN if instance.is_superuser else Perfil.Rol.COBRADOR
         Perfil.objects.get_or_create(usuario=instance, defaults={'rol': rol})
