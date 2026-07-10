@@ -21,6 +21,7 @@ body {
     background-color: var(--background);
     color: var(--text-color);
     min-height: 100vh;
+    padding-top: 64px;
 }
 
 .topbar {
@@ -29,7 +30,13 @@ body {
     justify-content: space-between;
     background-color: #ffffff;
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem 2rem;
+    padding: 0 2rem;
+    height: 64px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 900;
 }
 
 .topbar-left {
@@ -439,4 +446,50 @@ body {
     align-items: center;
     gap: 1rem;
     margin-top: 0.5rem;
+}
+
+/* Contenedor con scroll horizontal para tablas en pantallas angostas */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+    .topbar {
+        padding: 0 1rem;
+    }
+
+    .topbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .page-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .nav-menu {
+        width: 85vw;
+    }
+
+    .data-form {
+        max-width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger {
+        text-align: center;
+    }
 }

@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.db.models.deletion import ProtectedError
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
@@ -42,5 +44,10 @@ class ClienteDeleteView(DeleteView):
     success_url = reverse_lazy('clientes:index')
 
     def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+        except ProtectedError:
+            messages.error(self.request, 'No se puede eliminar: el cliente tiene préstamos registrados.')
+            return redirect('clientes:index')
         messages.success(self.request, 'Cliente eliminado correctamente.')
-        return super().form_valid(form)
+        return response

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar pago{% endblock %}
+
+{% block content %}
+<h1>Registrar pago</h1>
+<p>Cuota {{ cuota.numero }} del préstamo de <strong>{{ cuota.prestamo.cliente }}</strong> — vence el {{ cuota.fecha_vencimiento }}.</p>
+
+<form method="post" class="data-form" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+            <span class="error-message">{{ field.errors.0 }}</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">Guardar</button>
+        <a href="{% url 'pagos:index' %}" class="btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

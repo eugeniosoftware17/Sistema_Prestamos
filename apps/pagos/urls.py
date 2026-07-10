@@ -5,5 +5,6 @@ from . import views
 app_name = 'pagos'
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.CuotaListView.as_view(), name='index'),
+    path('<int:pk>/registrar/', views.registrar_pago, name='registrar_pago'),
 ]

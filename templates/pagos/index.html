@@ -3,6 +3,61 @@
 {% block title %}Pagos{% endblock %}
 
 {% block content %}
-<h1>Pagos</h1>
-<p>Próximamente.</p>
+<div class="page-header">
+    <h1>Cuotas</h1>
+</div>
+
+{% if cuotas %}
+<div class="table-responsive">
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Préstamo</th>
+            <th>N°</th>
+            <th>Monto</th>
+            <th>Vencimiento</th>
+            <th>Estado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cuota in cuotas %}
+        <tr>
+            <td>{{ cuota.prestamo.cliente }}</td>
+            <td>{{ cuota.numero }}</td>
+            <td>{{ cuota.monto }}</td>
+            <td>{{ cuota.fecha_vencimiento }}</td>
+            <td>
+                {% if cuota.estado == 'pendiente' and cuota.fecha_vencimiento < hoy %}
+                    <span class="link-danger">Vencida</span>
+                {% else %}
+                    {{ cuota.get_estado_display }}
+                {% endif %}
+            </td>
+            <td class="table-actions">
+                {% if cuota.estado != 'pagada' %}
+                    <a href="{% url 'pagos:registrar_pago' cuota.pk %}">Registrar pago</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Anterior</a>
+    {% endif %}
+    <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Siguiente &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<p>No hay cuotas registradas todavía. Se generan automáticamente al crear un préstamo.</p>
+{% endif %}
 {% endblock %}

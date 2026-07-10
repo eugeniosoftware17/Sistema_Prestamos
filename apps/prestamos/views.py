@@ -1,6 +1,10 @@
 from django.contrib import messages
+from django.db.models.deletion import ProtectedError
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+
+from pagos.services import generar_cuotas
 
 from .forms import PrestamoForm
 from .models import Prestamo
@@ -21,8 +25,10 @@ class PrestamoCreateView(CreateView):
     success_url = reverse_lazy('prestamos:index')
 
     def form_valid(self, form):
-        messages.success(self.request, 'Préstamo creado correctamente.')
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        generar_cuotas(self.object)
+        messages.success(self.request, 'Préstamo creado correctamente, cuotas generadas.')
+        return response
 
 
 class PrestamoUpdateView(UpdateView):
@@ -42,5 +48,10 @@ class PrestamoDeleteView(DeleteView):
     success_url = reverse_lazy('prestamos:index')
 
     def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+        except ProtectedError:
+            messages.error(self.request, 'No se puede eliminar: el préstamo tiene cuotas con pagos registrados.')
+            return redirect('prestamos:index')
         messages.success(self.request, 'Préstamo eliminado correctamente.')
-        return super().form_valid(form)
+        return response
