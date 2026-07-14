@@ -83,3 +83,41 @@ class CuotaListViewTests(TestCase):
         response = self.client.get(reverse('pagos:index'), {'estado': 'vencida'})
         self.assertContains(response, 'Ana Torres')
         self.assertNotContains(response, 'Beto Ruiz')
+
+
+class ReciboPagoTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username='tester3', password='clave-segura-123')
+        self.client.force_login(self.user)
+        cliente = Cliente.objects.create(
+            nombre_completo='Ana Torres', cedula='001-1111111-1', telefono='', email='', direccion=''
+        )
+        prestamo = Prestamo.objects.create(
+            cliente=cliente, monto=Decimal('1000.00'), tasa_interes=Decimal('5'),
+            plazo_meses=1, fecha_inicio=date(2026, 1, 1), estado=Prestamo.Estado.ACTIVO,
+        )
+        generar_cuotas(prestamo)
+        cuota = prestamo.cuotas.get(numero=1)
+        self.pago = cuota.pagos.create(monto_pagado=cuota.monto, fecha_pago=date(2026, 1, 5))
+
+    def test_primera_vez_dice_original(self):
+        response = self.client.get(reverse('pagos:recibo_pago', args=[self.pago.pk]))
+        self.assertContains(response, 'ORIGINAL')
+        self.pago.refresh_from_db()
+        self.assertTrue(self.pago.impreso)
+
+    def test_segunda_vez_dice_copia(self):
+        self.client.get(reverse('pagos:recibo_pago', args=[self.pago.pk]))
+        response = self.client.get(reverse('pagos:recibo_pago', args=[self.pago.pk]))
+        self.assertContains(response, 'COPIA')
+        self.assertNotContains(response, 'ORIGINAL')
+
+    def test_usa_el_diseno_configurado(self):
+        from core.models import ConfiguracionSitio
+
+        config = ConfiguracionSitio.cargar()
+        config.diseno_recibo = ConfiguracionSitio.DisenoRecibo.TICKET
+        config.save()
+
+        response = self.client.get(reverse('pagos:recibo_pago', args=[self.pago.pk]))
+        self.assertTemplateUsed(response, 'pagos/recibo_ticket.html')

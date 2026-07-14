@@ -30,7 +30,9 @@ class ConfiguracionViewTests(TestCase):
         self.client.force_login(self.user)
 
     def test_actualizar_nombre_del_sitio(self):
-        response = self.client.post(reverse('usuarios:configuracion'), {'nombre': 'Mi Sistema'})
+        response = self.client.post(
+            reverse('usuarios:configuracion'), {'nombre': 'Mi Sistema', 'diseno_recibo': 'formal'}
+        )
         self.assertRedirects(response, reverse('usuarios:configuracion'))
 
         from core.models import ConfiguracionSitio

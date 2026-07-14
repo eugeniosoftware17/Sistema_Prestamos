@@ -80,6 +80,23 @@
             </div>
         </div>
 
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Recibos</h2>
+                    <p class="config-card-hint">Diseño con el que se imprimen los recibos de pago.</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.diseno_recibo.id_for_label }}">{{ form.diseno_recibo.label }}</label>
+                {{ form.diseno_recibo }}
+                {% if form.diseno_recibo.errors %}<span class="error-message">{{ form.diseno_recibo.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+
         <div class="settings-actions-bar">
             <button type="submit" class="btn-primary">Guardar cambios</button>
         </div>

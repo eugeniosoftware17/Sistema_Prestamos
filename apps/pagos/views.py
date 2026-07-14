@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView
 
+from core.models import ConfiguracionSitio
+
 from .forms import PagoForm
 from .models import Cuota, Pago
 
@@ -61,6 +63,22 @@ def registrar_pago(request, pk):
     return render(request, 'pagos/registrar_pago.html', {'form': form, 'cuota': cuota})
 
 
+RECIBO_TEMPLATES = {
+    ConfiguracionSitio.DisenoRecibo.FORMAL: 'pagos/recibo_formal.html',
+    ConfiguracionSitio.DisenoRecibo.TICKET: 'pagos/recibo_ticket.html',
+    ConfiguracionSitio.DisenoRecibo.MINIMALISTA: 'pagos/recibo_minimalista.html',
+}
+
+
 def recibo_pago(request, pk):
     pago = get_object_or_404(Pago, pk=pk)
-    return render(request, 'pagos/recibo.html', {'pago': pago})
+
+    es_copia = pago.impreso
+    if not pago.impreso:
+        pago.impreso = True
+        pago.save(update_fields=['impreso'])
+
+    config = ConfiguracionSitio.cargar()
+    template_name = RECIBO_TEMPLATES.get(config.diseno_recibo, 'pagos/recibo_formal.html')
+
+    return render(request, template_name, {'pago': pago, 'es_copia': es_copia})

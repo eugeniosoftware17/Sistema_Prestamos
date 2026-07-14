@@ -3,6 +3,10 @@
 {% block title %}Recibo de pago{% endblock %}
 
 {% block content %}
+<div class="recibo-sello {% if es_copia %}recibo-sello-copia{% endif %}">
+    {% if es_copia %}COPIA{% else %}ORIGINAL{% endif %}
+</div>
+
 <h2>Recibo de pago</h2>
 
 <div class="campo"><span>Recibo N°</span><span>{{ pago.pk }}</span></div>

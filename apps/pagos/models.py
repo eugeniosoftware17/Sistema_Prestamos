@@ -29,6 +29,7 @@ class Pago(TimeStampedModel):
     monto_pagado = models.DecimalField(max_digits=12, decimal_places=2)
     fecha_pago = models.DateField()
     metodo = models.CharField(max_length=50, blank=True)
+    impreso = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Pago de {self.monto_pagado} - {self.cuota}'

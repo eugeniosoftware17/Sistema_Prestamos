@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo de pago | {{ config_sitio.nombre }}</title>
+    <link rel="stylesheet" href="{% static 'css/recibo_ticket.css' %}">
+</head>
+<body>
+
+<button type="button" class="no-print btn-imprimir" onclick="window.print()">Imprimir</button>
+
+<div class="ticket">
+    <div class="ticket-header">
+        {% if config_sitio.icono %}<img src="{{ config_sitio.icono.url }}" alt="" class="ticket-logo">{% endif %}
+        <strong>{{ config_sitio.nombre }}</strong>
+        {% if config_sitio.direccion %}<p>{{ config_sitio.direccion }}</p>{% endif %}
+        {% if config_sitio.telefono %}<p>Tel: {{ config_sitio.telefono }}</p>{% endif %}
+        {% if config_sitio.rnc %}<p>RNC: {{ config_sitio.rnc }}</p>{% endif %}
+    </div>
+
+    <div class="ticket-sello">{% if es_copia %}*** COPIA ***{% else %}*** ORIGINAL ***{% endif %}</div>
+
+    <div class="ticket-divider"></div>
+
+    <div class="ticket-linea"><span>Recibo</span><span>#{{ pago.pk }}</span></div>
+    <div class="ticket-linea"><span>Fecha</span><span>{{ pago.fecha_pago }}</span></div>
+    <div class="ticket-linea"><span>Cliente</span><span>{{ pago.cuota.prestamo.cliente }}</span></div>
+    <div class="ticket-linea"><span>Préstamo</span><span>#{{ pago.cuota.prestamo.pk }}</span></div>
+    <div class="ticket-linea"><span>Cuota</span><span>N° {{ pago.cuota.numero }}</span></div>
+    <div class="ticket-linea"><span>Método</span><span>{{ pago.metodo|default:"—" }}</span></div>
+
+    <div class="ticket-divider"></div>
+
+    <div class="ticket-total">
+        <span>Total pagado</span>
+        <span>{{ pago.monto_pagado }}</span>
+    </div>
+
+    <div class="ticket-divider"></div>
+
+    <p class="ticket-gracias">¡Gracias por su pago!</p>
+</div>
+
+</body>
+</html>

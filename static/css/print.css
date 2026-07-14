@@ -90,6 +90,24 @@ body {
     color: var(--text-muted);
 }
 
+.recibo-sello {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+}
+
+.recibo-sello-copia {
+    color: var(--text-muted);
+    border-color: var(--border-color);
+}
+
 @media print {
     .no-print {
         display: none !important;

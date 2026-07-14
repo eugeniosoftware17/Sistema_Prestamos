@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo de pago | {{ config_sitio.nombre }}</title>
+    <link rel="stylesheet" href="{% static 'css/recibo_minimalista.css' %}">
+</head>
+<body>
+
+<button type="button" class="no-print btn-imprimir" onclick="window.print()">Imprimir</button>
+
+<div class="minimal-card">
+    <div class="minimal-sello {% if es_copia %}minimal-sello-copia{% endif %}">
+        {% if es_copia %}Copia{% else %}Original{% endif %}
+    </div>
+
+    <span class="minimal-label">Monto pagado</span>
+    <div class="minimal-monto">{{ pago.monto_pagado }}</div>
+
+    <div class="minimal-empresa">
+        {% if config_sitio.icono %}<img src="{{ config_sitio.icono.url }}" alt="">{% endif %}
+        <span>{{ config_sitio.nombre }}</span>
+    </div>
+
+    <div class="minimal-detalle">
+        <div><span>Cliente</span><strong>{{ pago.cuota.prestamo.cliente }}</strong></div>
+        <div><span>Recibo</span><strong>#{{ pago.pk }}</strong></div>
+        <div><span>Cuota</span><strong>N° {{ pago.cuota.numero }} &middot; Préstamo #{{ pago.cuota.prestamo.pk }}</strong></div>
+        <div><span>Fecha</span><strong>{{ pago.fecha_pago }}</strong></div>
+        <div><span>Método</span><strong>{{ pago.metodo|default:"—" }}</strong></div>
+    </div>
+</div>
+
+</body>
+</html>
