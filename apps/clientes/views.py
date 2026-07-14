@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
@@ -72,3 +72,8 @@ class ClienteDeleteView(DeleteView):
             return redirect('clientes:index')
         messages.success(self.request, 'Cliente eliminado correctamente.')
         return response
+
+
+def estado_cuenta(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    return render(request, 'clientes/estado_cuenta.html', {'cliente': cliente})

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.db.models import Q
 from django.db.models.deletion import ProtectedError
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
@@ -90,3 +90,8 @@ class PrestamoDeleteView(DeleteView):
             return redirect('prestamos:index')
         messages.success(self.request, 'Préstamo eliminado correctamente.')
         return response
+
+
+def contrato(request, pk):
+    prestamo = get_object_or_404(Prestamo, pk=pk)
+    return render(request, 'prestamos/contrato.html', {'prestamo': prestamo})

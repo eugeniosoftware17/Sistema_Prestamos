@@ -1,0 +1,32 @@
+{% extends "print_base.html" %}
+
+{% block title %}Contrato de préstamo{% endblock %}
+
+{% block content %}
+<h2>Detalle de préstamo</h2>
+
+<div class="campo"><span>Cliente</span><span>{{ prestamo.cliente }}</span></div>
+<div class="campo"><span>Cédula</span><span>{{ prestamo.cliente.cedula }}</span></div>
+<div class="campo"><span>Monto</span><span>{{ prestamo.monto }}</span></div>
+<div class="campo"><span>Tasa de interés</span><span>{{ prestamo.tasa_interes }}%</span></div>
+<div class="campo"><span>Plazo</span><span>{{ prestamo.plazo_meses }} meses</span></div>
+<div class="campo"><span>Fecha de inicio</span><span>{{ prestamo.fecha_inicio }}</span></div>
+<div class="campo"><span>Estado</span><span>{{ prestamo.get_estado_display }}</span></div>
+
+<h2>Cuotas</h2>
+<table>
+    <thead>
+        <tr><th>N°</th><th>Monto</th><th>Vencimiento</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+        {% for cuota in prestamo.cuotas.all %}
+        <tr>
+            <td>{{ cuota.numero }}</td>
+            <td>{{ cuota.monto }}</td>
+            <td>{{ cuota.fecha_vencimiento }}</td>
+            <td>{{ cuota.get_estado_display }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

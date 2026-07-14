@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Resultados para "{{ query }}"</h1>
+</div>
+
+{% if not query %}
+<p>Escribe algo en el buscador de arriba para encontrar clientes o préstamos.</p>
+{% else %}
+
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Clientes</h2>
+            <p class="config-card-hint">{{ clientes|length }} resultado{{ clientes|length|pluralize }}.</p>
+        </div>
+    </div>
+    {% if clientes %}
+    <div class="table-responsive">
+    <table class="data-table">
+        <thead>
+            <tr><th>Nombre</th><th>Cédula</th><th>Teléfono</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.nombre_completo }}</td>
+                <td>{{ cliente.cedula }}</td>
+                <td>{{ cliente.telefono|default:"—" }}</td>
+                <td class="table-actions"><a href="{% url 'clientes:detalle' cliente.pk %}">Ver</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p>No se encontraron clientes.</p>
+    {% endif %}
+</div>
+
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Préstamos</h2>
+            <p class="config-card-hint">{{ prestamos|length }} resultado{{ prestamos|length|pluralize }}.</p>
+        </div>
+    </div>
+    {% if prestamos %}
+    <div class="table-responsive">
+    <table class="data-table">
+        <thead>
+            <tr><th>Cliente</th><th>Monto</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.cliente }}</td>
+                <td>{{ prestamo.monto }}</td>
+                <td>{{ prestamo.get_estado_display }}</td>
+                <td class="table-actions"><a href="{% url 'prestamos:detalle' prestamo.pk %}">Ver</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p>No se encontraron préstamos.</p>
+    {% endif %}
+</div>
+
+{% endif %}
+{% endblock %}

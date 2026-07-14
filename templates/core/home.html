@@ -3,25 +3,129 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-<h1>Bienvenido, {{ user.get_username }}</h1>
-<p>Resumen general del sistema.</p>
+<div class="home-hero">
+    <h1 id="welcome-message">Bienvenido, {{ user.get_username }}</h1>
+    <p>Resumen general del sistema &middot; {{ hoy }}</p>
+</div>
 
-<div class="stats-grid">
-    <div class="stat-card">
-        <span class="stat-value">{{ total_clientes }}</span>
-        <span class="stat-label">Clientes registrados</span>
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Resumen</h2>
+            <p class="config-card-hint">Estado general de la cartera.</p>
+        </div>
     </div>
-    <div class="stat-card">
-        <span class="stat-value">{{ prestamos_activos }}</span>
-        <span class="stat-label">Préstamos activos</span>
-    </div>
-    <div class="stat-card">
-        <span class="stat-value">{{ cartera_activa }}</span>
-        <span class="stat-label">Cartera activa</span>
-    </div>
-    <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
-        <span class="stat-value">{{ cuotas_vencidas }}</span>
-        <span class="stat-label">Cuotas vencidas</span>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-value">{{ total_clientes }}</span>
+            <span class="stat-label">Clientes registrados</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ prestamos_activos }}</span>
+            <span class="stat-label">Préstamos activos</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ cartera_activa }}</span>
+            <span class="stat-label">Cartera activa</span>
+        </div>
+        <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
+            <span class="stat-value">{{ cuotas_vencidas }}</span>
+            <span class="stat-label">Cuotas vencidas</span>
+        </div>
     </div>
 </div>
+
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7v8l10-12h-7z"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Accesos rápidos</h2>
+            <p class="config-card-hint">Tareas frecuentes del día a día.</p>
+        </div>
+    </div>
+    <div class="quick-actions">
+        <a href="{% url 'clientes:crear' %}" class="quick-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span>Nuevo cliente</span>
+        </a>
+        <a href="{% url 'prestamos:crear' %}" class="quick-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Nuevo préstamo</span>
+        </a>
+        <a href="{% url 'pagos:index' %}" class="quick-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span>Registrar pago</span>
+        </a>
+        {% if user.perfil.rol == 'admin' %}
+        <a href="{% url 'reportes:index' %}" class="quick-action">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Ver reportes</span>
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Próximas a vencer</h2>
+            <p class="config-card-hint">Las 5 cuotas pendientes más próximas.</p>
+        </div>
+    </div>
+    {% if proximas_cuotas %}
+    <div class="table-responsive">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Cuota</th>
+                <th>Monto</th>
+                <th>Vencimiento</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cuota in proximas_cuotas %}
+            <tr>
+                <td>{{ cuota.prestamo.cliente }}</td>
+                <td>N° {{ cuota.numero }}</td>
+                <td>{{ cuota.monto }}</td>
+                <td>
+                    {% if cuota.fecha_vencimiento < hoy %}
+                        <span class="link-danger">{{ cuota.fecha_vencimiento }} (vencida)</span>
+                    {% else %}
+                        {{ cuota.fecha_vencimiento }}
+                    {% endif %}
+                </td>
+                <td class="table-actions">
+                    <a href="{% url 'pagos:registrar_pago' cuota.pk %}">Registrar pago</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p>No hay cuotas pendientes por ahora.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const mensaje = document.getElementById('welcome-message');
+            if (mensaje) mensaje.classList.add('fade-out');
+        }, 4000);
+    });
+</script>
 {% endblock %}

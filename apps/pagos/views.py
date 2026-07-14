@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView
 
 from .forms import PagoForm
-from .models import Cuota
+from .models import Cuota, Pago
 
 
 class CuotaListView(ListView):
@@ -15,9 +15,26 @@ class CuotaListView(ListView):
     ordering = ['fecha_vencimiento']
     paginate_by = 20
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        query = self.request.GET.get('q')
+        estado = self.request.GET.get('estado')
+        if query:
+            queryset = queryset.filter(prestamo__cliente__nombre_completo__icontains=query)
+        if estado == 'vencida':
+            queryset = queryset.filter(estado=Cuota.Estado.PENDIENTE, fecha_vencimiento__lt=date.today())
+        elif estado == Cuota.Estado.PENDIENTE:
+            queryset = queryset.filter(estado=Cuota.Estado.PENDIENTE, fecha_vencimiento__gte=date.today())
+        elif estado:
+            queryset = queryset.filter(estado=estado)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['hoy'] = date.today()
+        context['query'] = self.request.GET.get('q', '')
+        context['estado'] = self.request.GET.get('estado', '')
+        context['estados'] = Cuota.Estado.choices
         return context
 
 
@@ -42,3 +59,8 @@ def registrar_pago(request, pk):
         form = PagoForm(initial={'monto_pagado': cuota.monto, 'fecha_pago': date.today()})
 
     return render(request, 'pagos/registrar_pago.html', {'form': form, 'cuota': cuota})
+
+
+def recibo_pago(request, pk):
+    pago = get_object_or_404(Pago, pk=pk)
+    return render(request, 'pagos/recibo.html', {'pago': pago})

@@ -1,34 +1,121 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Configuración{% endblock %}
 
 {% block content %}
-<h1>Configuración</h1>
-<p>Nombre e ícono que se muestran en todo el sistema (barra superior, login, pestaña del navegador).</p>
-
-{% if config.icono %}
-<div class="detail-card" style="grid-template-columns: none; margin-top: 1rem;">
-    <div>
-        <span class="detail-label">Ícono actual</span>
-        <img src="{{ config.icono.url }}" alt="{{ config.nombre }}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; margin-top: 4px;">
-    </div>
+<div class="page-header">
+    <h1>Configuración</h1>
 </div>
-{% endif %}
+<p class="page-subtitle">Estos datos se muestran en todo el sistema: barra superior, login, pestaña del navegador y documentos imprimibles.</p>
 
-<form method="post" enctype="multipart/form-data" class="data-form" style="margin-top: 1.5rem;" novalidate>
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="form-group">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-            <span class="error-message">{{ field.errors.0 }}</span>
-        {% endif %}
-    </div>
-    {% endfor %}
+<div class="settings-layout">
+    <form method="post" enctype="multipart/form-data" class="settings-form" novalidate>
+        {% csrf_token %}
 
-    <div class="form-actions">
-        <button type="submit" class="btn-primary">Guardar</button>
-    </div>
-</form>
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Marca</h2>
+                    <p class="config-card-hint">Nombre e ícono visibles en todo el sistema.</p>
+                </div>
+            </div>
+            <div class="config-brand-row">
+                <div class="config-icon-preview" id="icon-preview">
+                    {% if config.icono %}
+                        <img src="{{ config.icono.url }}" alt="" id="icon-preview-img">
+                    {% else %}
+                        <span id="icon-preview-letter">{{ config.nombre|first|upper }}</span>
+                    {% endif %}
+                </div>
+                <div class="config-brand-fields">
+                    <div class="form-group">
+                        <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}<span class="error-message">{{ form.nombre.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.icono.id_for_label }}">{{ form.icono.label }}</label>
+                        {{ form.icono }}
+                        {% if form.icono.errors %}<span class="error-message">{{ form.icono.errors.0 }}</span>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="config-card">
+            <div class="config-card-header">
+                <div class="config-card-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+                </div>
+                <div>
+                    <h2 class="section-title">Datos de contacto y fiscales</h2>
+                    <p class="config-card-hint">Aparecen en el encabezado de recibos, contratos y estados de cuenta.</p>
+                </div>
+            </div>
+            <div class="config-grid">
+                <div class="form-group">
+                    <label for="{{ form.direccion.id_for_label }}">{{ form.direccion.label }}</label>
+                    {{ form.direccion }}
+                    {% if form.direccion.errors %}<span class="error-message">{{ form.direccion.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+                    {{ form.telefono }}
+                    {% if form.telefono.errors %}<span class="error-message">{{ form.telefono.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.rnc.id_for_label }}">{{ form.rnc.label }}</label>
+                    {{ form.rnc }}
+                    {% if form.rnc.errors %}<span class="error-message">{{ form.rnc.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<span class="error-message">{{ form.email.errors.0 }}</span>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-actions-bar">
+            <button type="submit" class="btn-primary">Guardar cambios</button>
+        </div>
+    </form>
+
+    <aside class="settings-preview">
+        <span class="settings-preview-label">Vista previa</span>
+
+        <div class="preview-box">
+            <div class="preview-topbar">
+                <div class="preview-topbar-icon" id="preview-topbar-icon">
+                    {% if config.icono %}<img src="{{ config.icono.url }}" alt="" id="preview-topbar-img">{% endif %}
+                </div>
+                <span id="preview-topbar-name">{{ config.nombre }}</span>
+            </div>
+        </div>
+
+        <div class="preview-box preview-doc">
+            <div class="preview-doc-icon" id="preview-doc-icon">
+                {% if config.icono %}<img src="{{ config.icono.url }}" alt="" id="preview-doc-img">{% endif %}
+            </div>
+            <div class="preview-doc-info">
+                <strong id="preview-doc-name">{{ config.nombre }}</strong>
+                <p id="preview-doc-direccion">{{ config.direccion|default:"Dirección de la empresa" }}</p>
+                <p>
+                    <span id="preview-doc-telefono">{{ config.telefono|default:"Teléfono" }}</span>
+                    &middot;
+                    <span id="preview-doc-rnc">RNC: {{ config.rnc|default:"—" }}</span>
+                </p>
+                <p id="preview-doc-email">{{ config.email|default:"correo@empresa.com" }}</p>
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/configuracion_preview.js' %}"></script>
 {% endblock %}

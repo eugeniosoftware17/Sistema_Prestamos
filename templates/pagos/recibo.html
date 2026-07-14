@@ -1,0 +1,15 @@
+{% extends "print_base.html" %}
+
+{% block title %}Recibo de pago{% endblock %}
+
+{% block content %}
+<h2>Recibo de pago</h2>
+
+<div class="campo"><span>Recibo N°</span><span>{{ pago.pk }}</span></div>
+<div class="campo"><span>Fecha de pago</span><span>{{ pago.fecha_pago }}</span></div>
+<div class="campo"><span>Cliente</span><span>{{ pago.cuota.prestamo.cliente }}</span></div>
+<div class="campo"><span>Préstamo</span><span>#{{ pago.cuota.prestamo.pk }}</span></div>
+<div class="campo"><span>Cuota</span><span>N° {{ pago.cuota.numero }}</span></div>
+<div class="campo"><span>Monto pagado</span><span>{{ pago.monto_pagado }}</span></div>
+<div class="campo"><span>Método</span><span>{{ pago.metodo|default:"—" }}</span></div>
+{% endblock %}

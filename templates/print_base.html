@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Documento{% endblock %} | {{ config_sitio.nombre }}</title>
+    <link rel="stylesheet" href="{% static 'css/print.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="print-header">
+    {% if config_sitio.icono %}<img src="{{ config_sitio.icono.url }}" alt="" class="print-logo">{% endif %}
+    <div class="print-empresa">
+        <h1>{{ config_sitio.nombre }}</h1>
+        {% if config_sitio.direccion %}<p>{{ config_sitio.direccion }}</p>{% endif %}
+        <p>
+            {% if config_sitio.telefono %}Tel: {{ config_sitio.telefono }}{% endif %}
+            {% if config_sitio.rnc %} &middot; RNC: {{ config_sitio.rnc }}{% endif %}
+        </p>
+        {% if config_sitio.email %}<p>{{ config_sitio.email }}</p>{% endif %}
+    </div>
+</div>
+
+<button type="button" class="btn-primary no-print" onclick="window.print()">Imprimir</button>
+
+<main class="print-content">
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>

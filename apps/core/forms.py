@@ -6,4 +6,4 @@ from .models import ConfiguracionSitio
 class ConfiguracionSitioForm(forms.ModelForm):
     class Meta:
         model = ConfiguracionSitio
-        fields = ['nombre', 'icono']
+        fields = ['nombre', 'icono', 'direccion', 'telefono', 'rnc', 'email']

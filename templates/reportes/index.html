@@ -3,50 +3,75 @@
 {% block title %}Reportes{% endblock %}
 
 {% block content %}
-<h1>Reportes</h1>
-
-<div class="stats-grid">
-    <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
-        <span class="stat-value">{{ cuotas_vencidas }}</span>
-        <span class="stat-label">Cuotas vencidas</span>
-    </div>
-    <div class="stat-card">
-        <span class="stat-value">{{ pagos_del_mes }}</span>
-        <span class="stat-label">Cobrado este mes</span>
-    </div>
+<div class="page-header">
+    <h1>Reportes</h1>
 </div>
+<p class="page-subtitle">Resumen general de la cartera de préstamos y los cobros del sistema.</p>
 
-<h2 class="section-title" style="margin-top: 2rem;">Préstamos por estado</h2>
-<div class="bar-chart">
-    {% for fila in prestamos_por_estado %}
-    <div class="bar-row">
-        <span class="bar-label">{{ fila.estado }}</span>
-        <div class="bar-track">
-            <div class="bar-fill bar-{{ fila.valor }}" style="width: {% widthratio fila.cantidad max_cantidad 100 %}%;"></div>
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         </div>
-        <span class="bar-value">{{ fila.cantidad }} &middot; {{ fila.monto }}</span>
+        <div>
+            <h2 class="section-title">Resumen</h2>
+            <p class="config-card-hint">Indicadores clave del sistema.</p>
+        </div>
     </div>
-    {% endfor %}
+    <div class="stats-grid">
+        <div class="stat-card {% if cuotas_vencidas > 0 %}stat-card-alert{% endif %}">
+            <span class="stat-value">{{ cuotas_vencidas }}</span>
+            <span class="stat-label">Cuotas vencidas</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ pagos_del_mes }}</span>
+            <span class="stat-label">Cobrado este mes</span>
+        </div>
+    </div>
 </div>
 
-<div class="table-responsive" style="margin-top: 1.5rem;">
-<table class="data-table">
-    <thead>
-        <tr>
-            <th>Estado</th>
-            <th>Cantidad</th>
-            <th>Monto total</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Préstamos por estado</h2>
+            <p class="config-card-hint">Distribución de la cartera según su estado actual.</p>
+        </div>
+    </div>
+
+    <div class="bar-chart">
         {% for fila in prestamos_por_estado %}
-        <tr>
-            <td>{{ fila.estado }}</td>
-            <td>{{ fila.cantidad }}</td>
-            <td>{{ fila.monto }}</td>
-        </tr>
+        <div class="bar-row">
+            <span class="bar-label">{{ fila.estado }}</span>
+            <div class="bar-track">
+                <div class="bar-fill bar-{{ fila.valor }}" style="width: {% widthratio fila.cantidad max_cantidad 100 %}%;"></div>
+            </div>
+            <span class="bar-value">{{ fila.cantidad }} &middot; {{ fila.monto }}</span>
+        </div>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+
+    <div class="table-responsive" style="margin-top: 1.5rem;">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Estado</th>
+                <th>Cantidad</th>
+                <th>Monto total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in prestamos_por_estado %}
+            <tr>
+                <td>{{ fila.estado }}</td>
+                <td>{{ fila.cantidad }}</td>
+                <td>{{ fila.monto }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
 </div>
 {% endblock %}

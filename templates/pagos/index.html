@@ -7,6 +7,17 @@
     <h1>Cuotas</h1>
 </div>
 
+<form method="get" class="search-form">
+    <input type="text" name="q" value="{{ query }}" placeholder="Buscar por cliente...">
+    <select name="estado">
+        <option value="">Todos los estados</option>
+        {% for valor, etiqueta in estados %}
+            <option value="{{ valor }}" {% if valor == estado %}selected{% endif %}>{{ etiqueta }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn-secondary">Filtrar</button>
+</form>
+
 {% if cuotas %}
 <div class="table-responsive">
 <table class="data-table">
@@ -37,6 +48,8 @@
             <td class="table-actions">
                 {% if cuota.estado != 'pagada' %}
                     <a href="{% url 'pagos:registrar_pago' cuota.pk %}">Registrar pago</a>
+                {% else %}
+                    <a href="{% url 'pagos:recibo_pago' cuota.pagos.last.pk %}" target="_blank">Recibo</a>
                 {% endif %}
             </td>
         </tr>

@@ -12,6 +12,10 @@ class TimeStampedModel(models.Model):
 class ConfiguracionSitio(TimeStampedModel):
     nombre = models.CharField(max_length=100, default='E2moneey')
     icono = models.ImageField(upload_to='configuracion/', blank=True, null=True)
+    direccion = models.CharField(max_length=255, blank=True)
+    telefono = models.CharField(max_length=20, blank=True)
+    rnc = models.CharField('RNC', max_length=20, blank=True)
+    email = models.EmailField(blank=True)
 
     class Meta:
         verbose_name = 'Configuración del sitio'

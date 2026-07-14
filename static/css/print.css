@@ -1,0 +1,101 @@
+:root {
+    --primary: #2563eb;
+    --text-color: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    color: var(--text-color);
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.print-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.print-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.print-empresa h1 {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.print-empresa p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+}
+
+.print-content h2 {
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.print-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.print-content th,
+.print-content td {
+    text-align: left;
+    padding: 0.5rem 0.25rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.print-content .campo {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.35rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.print-content .campo span:first-child {
+    color: var(--text-muted);
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    body {
+        padding: 0;
+    }
+}
