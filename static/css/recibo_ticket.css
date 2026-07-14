@@ -111,15 +111,23 @@ body {
     margin-top: 0.5rem;
 }
 
+@page {
+    size: 80mm auto;
+    margin: 0;
+}
+
 @media print {
     body {
         background-color: #ffffff;
         padding: 0;
+        display: block;
+        width: 80mm;
     }
 
     .ticket {
         box-shadow: none;
         width: 100%;
+        padding: 0.5rem;
     }
 
     .no-print {
