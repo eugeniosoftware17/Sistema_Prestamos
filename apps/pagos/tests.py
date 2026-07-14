@@ -10,7 +10,12 @@ from clientes.models import Cliente
 from prestamos.models import Prestamo
 
 from .models import Cuota
-from .services import enviar_recibo_por_correo, generar_cuotas, generar_link_whatsapp
+from .services import (
+    enviar_recibo_por_correo,
+    generar_cuotas,
+    generar_link_bluetooth_print,
+    generar_link_whatsapp,
+)
 
 
 class RegistrarPagoTests(TestCase):
@@ -164,6 +169,18 @@ class NotificacionesPagoTests(TestCase):
         pago = self._crear_pago(telefono='')
         link = generar_link_whatsapp(pago)
         self.assertIsNone(link)
+
+    def test_link_bluetooth_print_original(self):
+        pago = self._crear_pago()
+        link = generar_link_bluetooth_print(pago, es_copia=False)
+        self.assertTrue(link.startswith('intent://send/#Intent;'))
+        self.assertIn('package=mate.bluetoothprint', link)
+        self.assertIn('ORIGINAL', link)
+
+    def test_link_bluetooth_print_copia(self):
+        pago = self._crear_pago()
+        link = generar_link_bluetooth_print(pago, es_copia=True)
+        self.assertIn('COPIA', link)
 
     def test_registrar_pago_envia_correo_automaticamente(self):
         cliente = Cliente.objects.create(

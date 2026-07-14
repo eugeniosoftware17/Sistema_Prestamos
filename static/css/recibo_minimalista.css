@@ -29,7 +29,8 @@ body {
 }
 
 .btn-imprimir,
-.btn-whatsapp {
+.btn-whatsapp,
+.btn-bluetooth {
     padding: 0.6rem 1.1rem;
     border-radius: 8px;
     border: none;
@@ -42,6 +43,10 @@ body {
 
 .btn-imprimir {
     background-color: var(--primary);
+}
+
+.btn-bluetooth {
+    background-color: #0a66c2;
 }
 
 .btn-whatsapp {

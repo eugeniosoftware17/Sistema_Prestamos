@@ -27,7 +27,8 @@ body {
 }
 
 .btn-imprimir,
-.btn-whatsapp {
+.btn-whatsapp,
+.btn-bluetooth {
     padding: 0.5rem 1rem;
     border-radius: 6px;
     border: none;
@@ -40,6 +41,10 @@ body {
 
 .btn-imprimir {
     background-color: #2563eb;
+}
+
+.btn-bluetooth {
+    background-color: #0a66c2;
 }
 
 .btn-whatsapp {
@@ -68,19 +73,19 @@ body {
 
 .ticket-header strong {
     display: block;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     text-transform: uppercase;
 }
 
 .ticket-header p {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
 }
 
 .ticket-sello {
     text-align: center;
     font-weight: bold;
-    font-size: 0.8rem;
+    font-size: 1rem;
     letter-spacing: 0.05em;
     margin: 0.5rem 0;
 }
@@ -93,21 +98,21 @@ body {
 .ticket-linea {
     display: flex;
     justify-content: space-between;
-    font-size: 0.78rem;
-    padding: 2px 0;
+    font-size: 0.95rem;
+    padding: 3px 0;
 }
 
 .ticket-total {
     display: flex;
     justify-content: space-between;
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     font-weight: bold;
-    padding: 4px 0;
+    padding: 6px 0;
 }
 
 .ticket-gracias {
     text-align: center;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     margin-top: 0.5rem;
 }
 

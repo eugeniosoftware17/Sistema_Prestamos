@@ -8,7 +8,7 @@ from core.models import ConfiguracionSitio
 
 from .forms import PagoForm
 from .models import Cuota, Pago
-from .services import enviar_recibo_por_correo, generar_link_whatsapp
+from .services import enviar_recibo_por_correo, generar_link_bluetooth_print, generar_link_whatsapp
 
 
 class CuotaListView(ListView):
@@ -89,5 +89,6 @@ def recibo_pago(request, pk):
         'pago': pago,
         'es_copia': es_copia,
         'link_whatsapp': generar_link_whatsapp(pago),
+        'link_bluetooth_print': generar_link_bluetooth_print(pago, es_copia),
     }
     return render(request, template_name, context)

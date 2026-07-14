@@ -80,3 +80,56 @@ def generar_link_whatsapp(pago):
         f'recibido el {pago.fecha_pago}. ¡Gracias! - {config_sitio.nombre}'
     )
     return f'https://wa.me/{numero}?text={quote(mensaje)}'
+
+
+def _texto_ticket_bluetooth_print(pago, es_copia):
+    """Arma el contenido del recibo con el formato de etiquetas que usa la
+    app 'Bluetooth Print' (mate.bluetoothprint): <BAF>Texto, donde
+    B=negrita(0/1), A=alineación(0 izq/1 centro/2 der), F=tamaño(0 normal/
+    1 alto doble/2 alto+ancho doble/3 ancho doble)."""
+    config_sitio = ConfiguracionSitio.cargar()
+    cliente = pago.cuota.prestamo.cliente
+    sello = 'COPIA' if es_copia else 'ORIGINAL'
+
+    lineas = [f'<113>{config_sitio.nombre}']
+    if config_sitio.direccion:
+        lineas.append(f'<101>{config_sitio.direccion}')
+    contacto = []
+    if config_sitio.telefono:
+        contacto.append(f'Tel: {config_sitio.telefono}')
+    if config_sitio.rnc:
+        contacto.append(f'RNC: {config_sitio.rnc}')
+    if contacto:
+        lineas.append(f'<101>{" - ".join(contacto)}')
+
+    lineas.append(f'<111>*** {sello} ***')
+    lineas.append('<100>--------------------------------')
+    lineas.append(f'<100>Recibo N: {pago.pk}')
+    lineas.append(f'<100>Fecha: {pago.fecha_pago}')
+    lineas.append(f'<100>Cliente: {cliente.nombre_completo}')
+    lineas.append(f'<100>Prestamo #{pago.cuota.prestamo.pk}')
+    lineas.append(f'<100>Cuota N: {pago.cuota.numero}')
+    lineas.append(f'<100>Metodo: {pago.metodo or "-"}')
+    lineas.append('<100>--------------------------------')
+    lineas.append(f'<112>Total pagado: {pago.monto_pagado}')
+    lineas.append('<101>Gracias por su pago!')
+
+    return '\n'.join(lineas)
+
+
+def generar_link_bluetooth_print(pago, es_copia):
+    """Arma un enlace intent:// que abre la app 'Bluetooth Print' directo con
+    el recibo ya armado, listo para imprimir en una impresora térmica Bluetooth
+    ya emparejada. Si la app no está instalada, Chrome cae a la Play Store."""
+    texto = _texto_ticket_bluetooth_print(pago, es_copia)
+    extra_texto = quote(texto, safe='')
+    fallback = quote('https://play.google.com/store/apps/details?id=mate.bluetoothprint', safe='')
+    return (
+        'intent://send/#Intent;'
+        'action=android.intent.action.SEND;'
+        'package=mate.bluetoothprint;'
+        'type=text/plain;'
+        f'S.android.intent.extra.TEXT={extra_texto};'
+        f'S.browser_fallback_url={fallback};'
+        'end'
+    )
