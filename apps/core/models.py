@@ -22,6 +22,10 @@ class ConfiguracionSitio(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         self.pk = 1
+        if not self.created_at:
+            existente = ConfiguracionSitio.objects.filter(pk=1).first()
+            if existente:
+                self.created_at = existente.created_at
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

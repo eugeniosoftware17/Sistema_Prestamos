@@ -4,5 +4,31 @@
 
 {% block content %}
 <h1>Configuración</h1>
-<p>Próximamente.</p>
+<p>Nombre e ícono que se muestran en todo el sistema (barra superior, login, pestaña del navegador).</p>
+
+{% if config.icono %}
+<div class="detail-card" style="grid-template-columns: none; margin-top: 1rem;">
+    <div>
+        <span class="detail-label">Ícono actual</span>
+        <img src="{{ config.icono.url }}" alt="{{ config.nombre }}" style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover; margin-top: 4px;">
+    </div>
+</div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="data-form" style="margin-top: 1.5rem;" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+            <span class="error-message">{{ field.errors.0 }}</span>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">Guardar</button>
+    </div>
+</form>
 {% endblock %}
