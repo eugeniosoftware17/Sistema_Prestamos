@@ -2,6 +2,12 @@
 
 {% block title %}Recibo de pago{% endblock %}
 
+{% block acciones_extra %}
+{% if link_whatsapp %}
+    <a href="{{ link_whatsapp }}" target="_blank" class="btn-whatsapp">Enviar por WhatsApp</a>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="recibo-sello {% if es_copia %}recibo-sello-copia{% endif %}">
     {% if es_copia %}COPIA{% else %}ORIGINAL{% endif %}

@@ -9,7 +9,12 @@
 </head>
 <body>
 
-<button type="button" class="no-print btn-imprimir" onclick="window.print()">Imprimir</button>
+<div class="no-print acciones">
+    <button type="button" class="btn-imprimir" onclick="window.print()">Imprimir</button>
+    {% if link_whatsapp %}
+        <a href="{{ link_whatsapp }}" target="_blank" class="btn-whatsapp">WhatsApp</a>
+    {% endif %}
+</div>
 
 <div class="ticket">
     <div class="ticket-header">

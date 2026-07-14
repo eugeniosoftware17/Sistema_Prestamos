@@ -147,3 +147,19 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Autenticación
 LOGIN_URL = 'usuarios:login'
 LOGIN_REDIRECT_URL = 'core:home'
+
+# Cierre de sesión automático por inactividad (10 minutos)
+SESSION_COOKIE_AGE = 600
+SESSION_SAVE_EVERY_REQUEST = True
+
+# Correo (envío de recibos). Sin credenciales en .env, los correos solo
+# se imprimen en la consola (no falla el registro de pagos).
+EMAIL_BACKEND = config(
+    'EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend'
+)
+EMAIL_HOST = config('EMAIL_HOST', default='')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default=EMAIL_HOST_USER or 'no-reply@localhost')

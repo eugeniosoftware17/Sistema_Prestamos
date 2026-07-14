@@ -8,6 +8,7 @@ from core.models import ConfiguracionSitio
 
 from .forms import PagoForm
 from .models import Cuota, Pago
+from .services import enviar_recibo_por_correo, generar_link_whatsapp
 
 
 class CuotaListView(ListView):
@@ -55,7 +56,10 @@ def registrar_pago(request, pk):
                 cuota.estado = Cuota.Estado.PAGADA
                 cuota.save()
 
-            messages.success(request, 'Pago registrado correctamente.')
+            if enviar_recibo_por_correo(pago):
+                messages.success(request, 'Pago registrado correctamente. Recibo enviado por correo.')
+            else:
+                messages.success(request, 'Pago registrado correctamente.')
             return redirect('pagos:index')
     else:
         form = PagoForm(initial={'monto_pagado': cuota.monto, 'fecha_pago': date.today()})
@@ -81,4 +85,9 @@ def recibo_pago(request, pk):
     config = ConfiguracionSitio.cargar()
     template_name = RECIBO_TEMPLATES.get(config.diseno_recibo, 'pagos/recibo_formal.html')
 
-    return render(request, template_name, {'pago': pago, 'es_copia': es_copia})
+    context = {
+        'pago': pago,
+        'es_copia': es_copia,
+        'link_whatsapp': generar_link_whatsapp(pago),
+    }
+    return render(request, template_name, context)

@@ -23,7 +23,10 @@
     </div>
 </div>
 
-<button type="button" class="btn-primary no-print" onclick="window.print()">Imprimir</button>
+<div class="no-print print-actions">
+    <button type="button" class="btn-primary" onclick="window.print()">Imprimir</button>
+    {% block acciones_extra %}{% endblock %}
+</div>
 
 <main class="print-content">
     {% block content %}{% endblock %}

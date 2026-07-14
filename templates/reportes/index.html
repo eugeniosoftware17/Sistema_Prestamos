@@ -14,8 +14,8 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         </div>
         <div>
-            <h2 class="section-title">Resumen</h2>
-            <p class="config-card-hint">Indicadores clave del sistema.</p>
+            <h2 class="section-title">Indicadores</h2>
+            <p class="config-card-hint">Métricas clave de la cartera y la cobranza.</p>
         </div>
     </div>
     <div class="stats-grid">
@@ -24,9 +24,52 @@
             <span class="stat-label">Cuotas vencidas</span>
         </div>
         <div class="stat-card">
+            <span class="stat-value">{{ cuotas_pendientes }}</span>
+            <span class="stat-label">Cuotas por vencer</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ cuotas_pagadas }}</span>
+            <span class="stat-label">Cuotas pagadas</span>
+        </div>
+        <div class="stat-card {% if tasa_morosidad > 10 %}stat-card-alert{% endif %}">
+            <span class="stat-value">{{ tasa_morosidad }}%</span>
+            <span class="stat-label">Tasa de morosidad</span>
+        </div>
+        <div class="stat-card">
             <span class="stat-value">{{ pagos_del_mes }}</span>
             <span class="stat-label">Cobrado este mes</span>
         </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ promedio_prestamo }}</span>
+            <span class="stat-label">Préstamo promedio</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ cartera_total }}</span>
+            <span class="stat-label">Cartera total (todos los estados)</span>
+        </div>
+    </div>
+</div>
+
+<div class="config-card">
+    <div class="config-card-header">
+        <div class="config-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div>
+            <h2 class="section-title">Cobros de los últimos 6 meses</h2>
+            <p class="config-card-hint">Total cobrado por mes.</p>
+        </div>
+    </div>
+    <div class="bar-chart">
+        {% for fila in cobros_por_mes %}
+        <div class="bar-row">
+            <span class="bar-label">{{ fila.mes }}</span>
+            <div class="bar-track">
+                <div class="bar-fill bar-activo" style="width: {% widthratio fila.total max_cobro 100 %}%;"></div>
+            </div>
+            <span class="bar-value">{{ fila.total }}</span>
+        </div>
+        {% endfor %}
     </div>
 </div>
 

@@ -138,6 +138,12 @@
 </main>
 
 <script src="{% static 'js/base.js' %}"></script>
+{% if user.is_authenticated %}
+    <form id="auto-logout-form" action="{% url 'usuarios:logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+    <script src="{% static 'js/inactivity.js' %}"></script>
+{% endif %}
 {% block extra_js %}{% endblock %}
 </body>
 </html>

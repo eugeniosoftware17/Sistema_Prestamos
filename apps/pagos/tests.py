@@ -2,6 +2,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 
@@ -9,7 +10,7 @@ from clientes.models import Cliente
 from prestamos.models import Prestamo
 
 from .models import Cuota
-from .services import generar_cuotas
+from .services import enviar_recibo_por_correo, generar_cuotas, generar_link_whatsapp
 
 
 class RegistrarPagoTests(TestCase):
@@ -121,3 +122,63 @@ class ReciboPagoTests(TestCase):
 
         response = self.client.get(reverse('pagos:recibo_pago', args=[self.pago.pk]))
         self.assertTemplateUsed(response, 'pagos/recibo_ticket.html')
+
+
+class NotificacionesPagoTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username='tester4', password='clave-segura-123')
+        self.client.force_login(self.user)
+
+    def _crear_pago(self, email='', telefono=''):
+        cliente = Cliente.objects.create(
+            nombre_completo='Ana Torres', cedula='001-1111111-1', telefono=telefono, email=email, direccion=''
+        )
+        prestamo = Prestamo.objects.create(
+            cliente=cliente, monto=Decimal('1000.00'), tasa_interes=Decimal('5'),
+            plazo_meses=1, fecha_inicio=date(2026, 1, 1), estado=Prestamo.Estado.ACTIVO,
+        )
+        generar_cuotas(prestamo)
+        cuota = prestamo.cuotas.get(numero=1)
+        return cuota.pagos.create(monto_pagado=cuota.monto, fecha_pago=date(2026, 1, 5))
+
+    def test_enviar_correo_con_email_registrado(self):
+        pago = self._crear_pago(email='ana@test.com')
+        enviado = enviar_recibo_por_correo(pago)
+        self.assertTrue(enviado)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('ana@test.com', mail.outbox[0].to)
+
+    def test_no_envia_correo_sin_email(self):
+        pago = self._crear_pago(email='')
+        enviado = enviar_recibo_por_correo(pago)
+        self.assertFalse(enviado)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_link_whatsapp_con_telefono(self):
+        pago = self._crear_pago(telefono='(809) 555-1234')
+        link = generar_link_whatsapp(pago)
+        self.assertIsNotNone(link)
+        self.assertTrue(link.startswith('https://wa.me/8095551234'))
+
+    def test_link_whatsapp_sin_telefono(self):
+        pago = self._crear_pago(telefono='')
+        link = generar_link_whatsapp(pago)
+        self.assertIsNone(link)
+
+    def test_registrar_pago_envia_correo_automaticamente(self):
+        cliente = Cliente.objects.create(
+            nombre_completo='Beto Ruiz', cedula='002-2222222-2', telefono='', email='beto@test.com', direccion=''
+        )
+        prestamo = Prestamo.objects.create(
+            cliente=cliente, monto=Decimal('1000.00'), tasa_interes=Decimal('5'),
+            plazo_meses=1, fecha_inicio=date(2026, 1, 1), estado=Prestamo.Estado.ACTIVO,
+        )
+        generar_cuotas(prestamo)
+        cuota = prestamo.cuotas.get(numero=1)
+
+        self.client.post(
+            reverse('pagos:registrar_pago', args=[cuota.pk]),
+            {'monto_pagado': cuota.monto, 'fecha_pago': '2026-02-10', 'metodo': 'Efectivo'},
+        )
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('beto@test.com', mail.outbox[0].to)

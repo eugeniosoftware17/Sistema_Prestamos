@@ -18,17 +18,32 @@ body {
     background-color: #f1f5f9;
 }
 
-.btn-imprimir {
+.acciones {
     position: fixed;
     top: 1rem;
     right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-imprimir,
+.btn-whatsapp {
     padding: 0.5rem 1rem;
     border-radius: 6px;
     border: none;
-    background-color: #2563eb;
     color: #ffffff;
     font-weight: 600;
+    font-size: 0.85rem;
+    text-decoration: none;
     cursor: pointer;
+}
+
+.btn-imprimir {
+    background-color: #2563eb;
+}
+
+.btn-whatsapp {
+    background-color: #25d366;
 }
 
 .ticket {
